@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <style>
+    body { font-family: system-ui; padding: 20px; background: #f0f0f0; }
+    #loginBox, #panel { width: 300px; margin: auto; padding: 20px; background: #fff; border-radius: 10px; }
+    input { width: 100%; padding: 8px; margin-top: 10px; }
+    button { width: 100%; padding: 10px; margin-top: 10px; }
+    #panel { display: none; }
+  </style>
+</head>
+<body>
+
+<div id="loginBox">
+  <h2>Admin Login</h2>
+  <input id="adminPass" type="password" placeholder="Admin password">
+  <button onclick="adminLogin()">Login</button>
+</div>
+
+<div id="panel">
+  <h2>Admin Panel</h2>
+  <button onclick="loadUsers()">📁 Users</button>
+  <button onclick="loadMessages()">💬 Messages</button>
+  <pre id="output"></pre>
+</div>
+
+<script>
+async function adminLogin() {
+  const pass = adminPass.value;
+
+  let res = await fetch("/admin/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password: pass })
+  });
+
+  const data = await res.json();
+  if (data.ok) {
+    loginBox.style.display = "none";
+    panel.style.display = "block";
+  } else alert("Wrong password!");
+}
+
+async function loadUsers() {
+  let res = await fetch("/api/users");
+  output.textContent = JSON.stringify(await res.json(), null, 2);
+}
+
+async function loadMessages() {
+  let res = await fetch("/api/messages", {
+    headers: { "Authorization": "Bearer " + prompt("User token:") }
+  });
+  output.textContent = JSON.stringify(await res.json(), null, 2);
+}
+</script>
+
+</body>
+</html>
