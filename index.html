@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>MyWebBase</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🗄️ MyWebBase</h1>
+  <div class="box">
+    <h2>👤 Користувачі</h2>
+    <input id="username" placeholder="Ім’я користувача">
+    <button onclick="addUser()">Додати</button>
+    <ul id="users"></ul>
+  </div>
+
+  <div class="box">
+    <h2>💬 Повідомлення</h2>
+    <input id="sender" placeholder="Відправник">
+    <input id="message" placeholder="Текст повідомлення">
+    <button onclick="addMessage()">Надіслати</button>
+    <ul id="messages"></ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+body {
+  font-family: system-ui;
+  background: #fafafa;
+  color: #222;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 30px;
+  color: #0066cc;
+}
+
+.box {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: inline-block;
+  padding: 20px;
+  margin: 10px;
+  width: 300px;
+  vertical-align: top;
+}
+
+input {
+  width: 90%;
+  padding: 8px;
+  margin: 5px 0;
+}
+
+button {
+  padding: 8px 15px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover { background: #0056b3; }
+
+ul {
+  text-align: left;
+  list-style: none;
+  padding: 0;
+}
