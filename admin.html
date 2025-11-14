@@ -7,8 +7,9 @@
     body { font-family: system-ui; padding: 20px; background: #f0f0f0; }
     #loginBox, #panel { width: 300px; margin: auto; padding: 20px; background: #fff; border-radius: 10px; }
     input { width: 100%; padding: 8px; margin-top: 10px; }
-    button { width: 100%; padding: 10px; margin-top: 10px; }
+    button { width: 100%; padding: 10px; margin-top: 10px; cursor: pointer; }
     #panel { display: none; }
+    pre { background:#222; color:#0f0; padding:10px; height:300px; overflow:auto; border-radius:8px; }
   </style>
 </head>
 <body>
@@ -27,31 +28,44 @@
 </div>
 
 <script>
-async function adminLogin() {
-  const pass = adminPass.value;
+/* ================================
+   CONFIG (ЗАМІНИ API KEY)
+================================ */
+const API_KEY = "super-secret-key";  // ← ВСТАВ СВІЙ
 
-  let res = await fetch("/admin/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ password: pass })
-  });
+/* ================================
+   SIMPLE ADMIN PASSWORD (локально)
+================================ */
+const ADMIN_PASSWORD = "12345";  // ← можу зробити через сервер, якщо хочеш
 
-  const data = await res.json();
-  if (data.ok) {
+function adminLogin() {
+  if (adminPass.value === ADMIN_PASSWORD) {
     loginBox.style.display = "none";
     panel.style.display = "block";
-  } else alert("Wrong password!");
+  } else {
+    alert("Wrong password!");
+  }
 }
 
+/* ================================
+   LOAD USERS
+================================ */
 async function loadUsers() {
-  let res = await fetch("/api/users");
+  let res = await fetch("/api/users", {
+    headers: { "x-api-key": API_KEY }
+  });
+
   output.textContent = JSON.stringify(await res.json(), null, 2);
 }
 
+/* ================================
+   LOAD MESSAGES
+================================ */
 async function loadMessages() {
   let res = await fetch("/api/messages", {
-    headers: { "Authorization": "Bearer " + prompt("User token:") }
+    headers: { "x-api-key": API_KEY }
   });
+
   output.textContent = JSON.stringify(await res.json(), null, 2);
 }
 </script>
