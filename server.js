@@ -5,6 +5,7 @@ import fs from "fs-extra";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const API_KEY = process.env.API_KEY || "secret-key";
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -21,6 +22,14 @@ if (!(await fs.readFile(USERS_FILE, "utf8")).trim()) await fs.writeJson(USERS_FI
 if (!(await fs.readFile(MESSAGES_FILE, "utf8")).trim()) await fs.writeJson(MESSAGES_FILE, []);
 
 // === API ===
+function checkKey(req, res, next) {
+  const key = req.headers["x-api-key"];
+  if (key !== API_KEY) {
+    return res.status(403).json({ error: "Invalid API KEY" });
+  }
+  next();
+}
+
 
 // Отримати користувачів
 app.get("/api/users", async (req, res) => {
@@ -58,3 +67,4 @@ app.post("/api/messages", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🌍 MyWebBase працює на http://localhost:${PORT}`);
 });
+app.use("/api", checkKey);
