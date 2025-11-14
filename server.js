@@ -2,25 +2,36 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import fs from "fs-extra";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 
 const app = express();
+
+// Порт Render або локальний
 const PORT = process.env.PORT || 3000;
 
-// СЕКРЕТИ
-const JWT_SECRET = process.env.JWT_SECRET || "super-secret-jwt";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
+// 🔐 Ключ доступу
+const API_KEY = process.env.API_KEY || "super-secret-key";
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
+// --- Перевірка ключа ---
+function checkKey(req, res, next) {
+  const key = req.headers["x-api-key"];
+  if (key !== API_KEY) {
+    return res.status(403).json({ error: "Invalid API KEY" });
+  }
+  next();
+}
+
+// Захищаємо всі маршрути /api/*
+app.use("/api", checkKey);
+
 // Файли бази
 const USERS_FILE = "./data/users.json";
 const MESSAGES_FILE = "./data/messages.json";
 
-// Переконуємось що файли є
+// Переконуємося, що файли існують
 await fs.ensureFile(USERS_FILE);
 await fs.ensureFile(MESSAGES_FILE);
 
@@ -31,96 +42,96 @@ if (!(await fs.readFile(MESSAGES_FILE, "utf8")).trim()) {
   await fs.writeJson(MESSAGES_FILE, []);
 }
 
-// ------------------ JWT Перевірка ------------------
-function auth(req, res, next) {
-  const token = req.headers["authorization"]?.split(" ")[1];
-  if (!token) return res.status(401).json({ error: "TOKEN_REQUIRED" });
+/* ========================= USERS ========================= */
 
-  try {
-    const user = jwt.verify(token, JWT_SECRET);
-    req.user = user;
-    next();
-  } catch (err) {
-    res.status(403).json({ error: "INVALID_TOKEN" });
-  }
-}
+app.get("/api/users", async (req, res) => {
+  const users = await fs.readJson(USERS_FILE);
+  res.json(users);
+});
 
-// ------------------ AUTH API ------------------
-app.post("/api/auth/register", async (req, res) => {
-  const { name, email, password } = req.body;
-
-  if (!name || !email || !password)
-    return res.status(400).json({ error: "MISSING_FIELDS" });
+app.post("/api/users", async (req, res) => {
+  const { name } = req.body;
+  if (!name) return res.status(400).json({ error: "Name is required" });
 
   const users = await fs.readJson(USERS_FILE);
-  if (users.find(u => u.email === email))
-    return res.status(400).json({ error: "EMAIL_EXISTS" });
-
-  const hash = bcrypt.hashSync(password, 10);
-
-  const user = {
-    id: users.length + 1,
-    name,
-    email,
-    password: hash
-  };
+  const user = { id: users.length + 1, name };
 
   users.push(user);
   await fs.writeJson(USERS_FILE, users, { spaces: 2 });
 
-  res.json({ success: true });
+  res.json(user);
 });
 
-app.post("/api/auth/login", async (req, res) => {
-  const { email, password } = req.body;
+/* ======================= AUTH (REGISTER + LOGIN) ======================= */
+
+// Реєстрація
+app.post("/api/register", async (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password)
+    return res.status(400).json({ error: "Username and password required" });
 
   const users = await fs.readJson(USERS_FILE);
-  const user = users.find(u => u.email === email);
-  if (!user) return res.status(400).json({ error: "USER_NOT_FOUND" });
 
-  const ok = bcrypt.compareSync(password, user.password);
-  if (!ok) return res.status(400).json({ error: "WRONG_PASSWORD" });
+  if (users.find(u => u.username === username))
+    return res.status(400).json({ error: "User already exists" });
 
-  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-    expiresIn: "30d"
-  });
+  const newUser = {
+    id: users.length + 1,
+    username,
+    password // 🔥 у справжніх системах треба хешувати!
+  };
 
-  res.json({ token });
+  users.push(newUser);
+  await fs.writeJson(USERS_FILE, users, { spaces: 2 });
+
+  res.json({ success: true, user: { id: newUser.id, username } });
 });
 
-// ------------------ МESSAGES (захищені) ------------------
-app.get("/api/messages", auth, async (req, res) => {
+// Логін
+app.post("/api/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  const users = await fs.readJson(USERS_FILE);
+  const user = users.find(
+    u => u.username === username && u.password === password
+  );
+
+  if (!user) return res.status(401).json({ error: "Invalid credentials" });
+
+  res.json({ success: true, user: { id: user.id, username: user.username } });
+});
+
+/* ========================= MESSAGES ========================= */
+
+app.get("/api/messages", async (req, res) => {
   const messages = await fs.readJson(MESSAGES_FILE);
   res.json(messages);
 });
 
-app.post("/api/messages", auth, async (req, res) => {
-  const { text } = req.body;
-  const sender = req.user.email;
-
-  if (!text) return res.status(400).json({ error: "EMPTY_MESSAGE" });
+app.post("/api/messages", async (req, res) => {
+  const { sender, text } = req.body;
+  if (!sender || !text) {
+    return res.status(400).json({ error: "Sender and text required" });
+  }
 
   const messages = await fs.readJson(MESSAGES_FILE);
 
-  const msg = {
+  const message = {
     id: messages.length + 1,
     sender,
     text,
-    createdAt: new Date().toISOString(),
+    createdAt: new Date().toISOString()
   };
 
-  messages.push(msg);
+  messages.push(message);
   await fs.writeJson(MESSAGES_FILE, messages, { spaces: 2 });
 
-  res.json(msg);
+  res.json(message);
 });
 
-// ------------------- АДМІН-ПАНЕЛЬ --------------------
-app.post("/admin/login", (req, res) => {
-  const { password } = req.body;
-  if (password === ADMIN_PASSWORD) return res.json({ ok: true });
-  res.status(403).json({ ok: false });
-});
+/* ======================== SERVER START ======================== */
 
-// ------------------- START --------------------
-app.listen(PORT, () => console.log(`🚀 MyWebBase running on PORT ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🌍 Server running on port ${PORT}`);
+});
