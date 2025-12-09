@@ -1,0 +1,563 @@
+/* Стилі для Chrome-подібного браузера */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #f1f3f4;
+    overflow: hidden;
+    height: 100vh;
+}
+
+.browser-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin: 0;
+}
+
+/* Верхня панель */
+.browser-header {
+    background: linear-gradient(to bottom, #4a90e2, #357abd);
+    color: white;
+    padding: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* Кнопки управління вікном */
+.window-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.window-btn {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: transparent;
+    transition: all 0.2s ease;
+}
+
+.window-btn:hover {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.window-btn.minimize {
+    background: #ffbd2e;
+}
+
+.window-btn.maximize {
+    background: #28ca42;
+}
+
+.window-btn.close {
+    background: #ff5f57;
+}
+
+/* Контейнер адресного рядка */
+.address-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+/* Навігаційні кнопки */
+.nav-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Адресний рядок */
+.address-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin: 0 12px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.security-icon {
+    color: #4a90e2;
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+.address-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #333;
+}
+
+.address-bar input::placeholder {
+    color: #999;
+}
+
+.bookmark-btn {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 8px;
+    transition: color 0.2s ease;
+}
+
+.bookmark-btn:hover {
+    color: #ff9800;
+}
+
+/* Керування браузером */
+.browser-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.control-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Вкладки */
+.tabs-container {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.tabs {
+    display: flex;
+    flex: 1;
+    gap: 2px;
+    overflow-x: auto;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    padding: 6px 12px;
+    min-width: 120px;
+    max-width: 200px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.tab:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.tab.active {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+}
+
+.tab-title {
+    flex: 1;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 8px;
+}
+
+.tab-close {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 2px;
+    font-size: 10px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.tab-close:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.new-tab-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+    transition: background 0.2s ease;
+}
+
+.new-tab-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Контент браузера */
+.browser-content {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+#browserFrame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: none;
+}
+
+#browserFrame.active {
+    display: block;
+}
+
+/* Стартова сторінка */
+.start-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.start-page-content {
+    text-align: center;
+    max-width: 600px;
+    padding: 40px;
+}
+
+.logo {
+    font-size: 64px;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.start-page h1 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+.search-container {
+    display: flex;
+    margin-bottom: 40px;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+#searchInput {
+    flex: 1;
+    padding: 16px 24px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-btn {
+    background: #4a90e2;
+    border: none;
+    color: white;
+    padding: 0 24px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.2s ease;
+}
+
+.search-btn:hover {
+    background: #357abd;
+}
+
+.quick-links {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.quick-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.quick-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.quick-link i {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.quick-link span {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+/* Статус бар */
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.zoom-btn {
+    background: none;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.zoom-btn:hover {
+    background: #e9ecef;
+}
+
+#zoomLevel {
+    min-width: 40px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Адаптивний дизайн */
+@media (max-width: 768px) {
+    .browser-header {
+        padding: 4px;
+    }
+    
+    .window-controls {
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+    
+    .window-btn {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .address-bar-container {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .nav-buttons {
+        order: 2;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .address-bar {
+        order: 1;
+        width: 100%;
+        margin: 0 0 8px 0;
+    }
+    
+    .browser-controls {
+        order: 3;
+    }
+    
+    .tabs-container {
+        padding: 2px;
+    }
+    
+    .tab {
+        min-width: 100px;
+        max-width: 150px;
+        padding: 4px 8px;
+    }
+    
+    .start-page-content {
+        padding: 20px;
+    }
+    
+    .logo {
+        font-size: 48px;
+    }
+    
+    .start-page h1 {
+        font-size: 24px;
+    }
+    
+    .quick-links {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .quick-link {
+        padding: 15px;
+    }
+    
+    .quick-link i {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .browser-container {
+        border-radius: 0;
+    }
+    
+    .browser-header {
+        border-radius: 0;
+    }
+    
+    .address-bar {
+        padding: 6px 12px;
+    }
+    
+    .nav-btn, .control-btn {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .quick-links {
+        grid-template-columns: 1fr;
+    }
+    
+    .status-bar {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+}
+
+/* Fullscreen режим */
+.fullscreen .browser-container {
+    border-radius: 0;
+    margin: 0;
+}
+
+.fullscreen .browser-header {
+    border-radius: 0;
+}
+
+.fullscreen .window-controls {
+    display: none;
+}
+
+.fullscreen .status-bar {
+    display: none;
+}
+
+/* Анімації */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.start-page-content {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Скролбари */
+.tabs::-webkit-scrollbar {
+    height: 4px;
+}
+
+.tabs::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.tabs::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+
+.tabs::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}

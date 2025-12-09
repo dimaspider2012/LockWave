@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LockWave Browser</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="browser-container">
+        <!-- Верхня панель браузера -->
+        <div class="browser-header">
+            <div class="address-bar-container">
+                <div class="nav-buttons">
+                    <button class="nav-btn" id="backBtn" title="Назад">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <button class="nav-btn" id="forwardBtn" title="Вперед">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="nav-btn" id="reloadBtn" title="Оновити">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="nav-btn" id="homeBtn" title="Домашня сторінка">
+                        <i class="fas fa-home"></i>
+                    </button>
+                </div>
+
+                <div class="address-bar">
+                    <i class="fas fa-lock security-icon"></i>
+                    <input type="text" id="urlInput" placeholder="Введіть URL" />
+                    <button class="bookmark-btn" title="Додати в закладки">
+                        <i class="far fa-star"></i>
+                    </button>
+                </div>
+
+                <div class="browser-controls">
+                    <button class="control-btn" id="fullscreenBtn" title="Повний екран">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button class="control-btn" id="menuBtn" title="Меню">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Вкладки -->
+            <div class="tabs-container">
+                <div class="tabs" id="tabsContainer">
+                    <div class="tab active" data-tab-id="1">
+                        <span class="tab-title">Нова вкладка</span>
+                        <button class="tab-close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <button class="new-tab-btn" id="newTabBtn" title="Нова вкладка">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Контент браузера -->
+        <div class="browser-content">
+            <iframe id="browserFrame" src="about:blank" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"></iframe>
+            <div class="start-page" id="startPage">
+                <div class="start-page-content">
+                    <div class="logo">
+                        <i class="fab fa-chrome"></i>
+                    </div>
+                    <h1>LockWave Browser</h1>
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Введіть URL" />
+                        <button class="search-btn" id="searchBtn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="quick-links">
+                        <div class="quick-link" data-url="https://youtube.com">
+                            <i class="fab fa-youtube"></i>
+                            <span>YouTube</span>
+                        </div>
+                        <div class="quick-link" data-url="https://facebook.com">
+                            <i class="fab fa-facebook"></i>
+                            <span>Facebook</span>
+                        </div>
+                        <div class="quick-link" data-url="https://x.com/?lang=uk">
+                            <i class="fab fa-twitter"></i>
+                            <span>X (Twitter)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
